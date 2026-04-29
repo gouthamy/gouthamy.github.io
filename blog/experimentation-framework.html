@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Behind the Scenes of A/B Testing — Goutham Yenuganti</title>
+  <meta name="description" content="How deterministic bucketing, feature flags, and statistical rigor power experimentation at companies like Netflix and Amazon. A deep technical dive by Goutham Yenuganti." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/blog.css" />
+</head>
+<body>
+
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">
+        <span class="logo-bracket">{</span>GY<span class="logo-bracket">}</span>
+      </a>
+      <div class="nav-right">
+        <a href="../index.html#blog" class="nav-back">← All Posts</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="post-hero">
+    <div class="post-hero-inner">
+      <div class="post-meta-top">
+        <span class="post-tag">Experimentation</span>
+        <span class="post-tag">Distributed Systems</span>
+        <span class="post-tag">Engineering at Scale</span>
+      </div>
+      <h1 class="post-title">Behind the Scenes of A/B Testing:<br />Why Your Friend on Netflix Sees a Feature You Don't</h1>
+      <p class="post-subtitle">Deterministic bucketing, feature flags, statistical rigor — and what I learned building experimentation infrastructure at Amazon Advertising.</p>
+      <div class="post-author-row">
+        <div class="post-author-avatar">GY</div>
+        <div class="post-author-info">
+          <strong>Goutham Yenuganti</strong>
+          <span>Lead Member Technical Staff · Salesforce · Ex-Amazon</span>
+        </div>
+        <div class="post-read-meta">
+          <span>12 min read</span>
+          <span class="dot-sep">·</span>
+          <span>Also on <a href="https://medium.com/@goutham.y_10934/behind-the-scenes-of-a-b-testing-why-your-friend-on-netflix-sees-a-new-feature-and-you-dont-85edc8e93461" target="_blank" rel="noopener">Medium ↗</a></span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main class="post-body">
+    <div class="post-container">
+
+      <!-- TOC -->
+      <aside class="toc" id="toc">
+        <div class="toc-label">In this article</div>
+        <ul>
+          <li><a href="#intro">The question behind the question</a></li>
+          <li><a href="#what-is-abt">What is A/B testing, really?</a></li>
+          <li><a href="#bucketing">Deterministic bucketing</a></li>
+          <li><a href="#feature-flags">Feature flags at scale</a></li>
+          <li><a href="#pipeline">The full experiment pipeline</a></li>
+          <li><a href="#stats">Statistical rigor</a></li>
+          <li><a href="#safety">Safety mechanisms</a></li>
+          <li><a href="#amazon">What I saw at Amazon</a></li>
+          <li><a href="#research">From practice to research</a></li>
+          <li><a href="#visualizer">Try the live visualizer</a></li>
+          <li><a href="#takeaways">Key takeaways</a></li>
+        </ul>
+      </aside>
+
+      <article class="post-article">
+
+        <section id="intro">
+          <p class="post-lead">You and your friend both open Netflix on the same night. Same account tier. Same device. But their homepage looks different — a new shuffle play button, a revamped row layout, a thumbnail you haven't seen. You're not glitching. You're in the control group.</p>
+          <p>This is A/B experimentation in production. And the machinery underneath it — deterministic bucketing, feature flags, event pipelines, statistical analysis — is some of the most carefully engineered infrastructure at any technology company. I've seen it from the inside at Amazon, where the ad rendering platform I worked on ran dozens of live experiments at any given moment across hundreds of millions of users.</p>
+          <p>This post is my attempt to open up that machinery.</p>
+        </section>
+
+        <section id="what-is-abt">
+          <h2>What is A/B testing, really?</h2>
+          <p>Most people describe A/B testing as "showing two versions of something and seeing which performs better." That's true, but it misses what makes it powerful and what makes it hard.</p>
+          <p>At its core, A/B testing is a <strong>controlled scientific experiment</strong> running in a live production system. You have a hypothesis — "a new thumbnail algorithm will increase play rate" — and you need to test it without disrupting the experience for your full user base, without introducing confounding variables, and with enough statistical confidence that you can act on the result.</p>
+          <p>The challenge isn't the UI change. The challenge is the infrastructure:</p>
+          <ul>
+            <li>How do you split users consistently without storing per-user state for every experiment?</li>
+            <li>How do you run 50 experiments simultaneously without them interfering with each other?</li>
+            <li>How do you know when you have enough data to call a result?</li>
+            <li>How do you roll back instantly if something goes wrong?</li>
+          </ul>
+          <p>These are distributed systems problems. Let's work through them.</p>
+        </section>
+
+        <section id="bucketing">
+          <h2>Deterministic bucketing: the elegant core</h2>
+          <p>The first problem is assignment: given a user, how do you decide which variant they're in?</p>
+          <p>The naive approach is a database lookup. Store a table: <code>user_id → experiment_id → variant</code>. Simple, but it doesn't scale. Netflix has 300M+ subscribers. Amazon has hundreds of millions of shoppers. Storing and querying per-user variant assignments at request time is a bottleneck you don't want.</p>
+          <p>The elegant solution is <strong>deterministic hashing</strong>. No database. No pre-assignment. Just a hash function.</p>
+
+          <div class="code-block">
+            <div class="code-label">Pseudocode</div>
+            <pre><code>function assignVariant(userId, experimentId, variants) {
+  // Hash is deterministic — same inputs always produce same output
+  const hash = murmurhash3(userId + ":" + experimentId);
+
+  // Normalize to [0, 100)
+  const bucket = hash % 100;
+
+  // Map bucket to variant
+  let cumulative = 0;
+  for (const [variant, weight] of variants) {
+    cumulative += weight;
+    if (bucket &lt; cumulative) return variant;
+  }
+}</code></pre>
+          </div>
+
+          <p>What this gives you:</p>
+          <ul>
+            <li><strong>Consistency</strong> — a user assigned to variant B at 9am is still in variant B at 9pm, and on a different device</li>
+            <li><strong>Statelessness</strong> — no database hit at assignment time, just a hash computation</li>
+            <li><strong>Isolation</strong> — including the <code>experimentId</code> in the hash key means the same user gets independently randomized across different experiments</li>
+          </ul>
+
+          <div class="callout callout-insight">
+            <span class="callout-icon">💡</span>
+            <div>
+              <strong>Why include experimentId in the hash?</strong>
+              <p>Without it, a user who falls in bucket 42 for experiment A would also fall in bucket 42 for experiment B, C, and D. That creates correlation between experiments — biasing your analysis. Salting with experimentId breaks that correlation and gives you independent randomization for free.</p>
+            </div>
+          </div>
+
+          <p>The bucket distribution (0–99) maps directly to traffic allocation. 50/50 split? Variants A and B each claim 50 buckets. 90/10 canary? Control gets buckets 0–89, treatment gets 90–99. You can see this exact mechanism in <a href="https://gouthamy.github.io/ab-bucket-explorer/ab-bucketing-visualizer.html" target="_blank" rel="noopener">my interactive bucketing visualizer</a> — try it with different user IDs and experiment names to see how the hash distributes across the 0–100% range.</p>
+        </section>
+
+        <section id="feature-flags">
+          <h2>Feature flags: the runtime control plane</h2>
+          <p>Bucketing tells you which variant a user is in. Feature flags are how your application code actually does something different for that user.</p>
+          <p>A feature flag is a conditional branch in your code whose behavior is controlled at runtime, not at deploy time:</p>
+
+          <div class="code-block">
+            <div class="code-label">Java — feature flag evaluation</div>
+            <pre><code>String variant = experimentService.getVariant(userId, "new_thumbnail_algo");
+
+if ("treatment".equals(variant)) {
+    return newThumbnailAlgorithm.score(content, userId);
+} else {
+    return legacyThumbnailAlgorithm.score(content, userId);
+}</code></pre>
+          </div>
+
+          <p>The critical property: the flag evaluation happens in the running process, reading from a local cache of flag configs that's refreshed from a central config service. This means:</p>
+          <ul>
+            <li><strong>No redeployment needed</strong> to change flag state</li>
+            <li><strong>Sub-millisecond evaluation</strong> — the config is in memory</li>
+            <li><strong>Targeting flexibility</strong> — flags can be conditioned on user segment, geography, device type, account tier, or percentage rollout</li>
+          </ul>
+
+          <div class="diagram-block">
+            <div class="diagram-title">Feature flag evaluation pipeline</div>
+            <div class="diagram-flow">
+              <div class="flow-node">Request arrives<br/><small>user_id, context</small></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-node highlight">Flag service<br/><small>local cache lookup</small></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-node">Variant assigned<br/><small>hash → bucket</small></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-node">Code branch taken<br/><small>treatment or control</small></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-node">Event logged<br/><small>variant + behavior</small></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="pipeline">
+          <h2>The full experiment pipeline</h2>
+          <p>From hypothesis to rollout decision, a production experiment goes through several stages. What looks like a simple toggle is actually a coordinated data pipeline:</p>
+
+          <div class="pipeline-steps">
+            <div class="pipeline-step">
+              <div class="step-num">01</div>
+              <div class="step-body">
+                <h4>Hypothesis & design</h4>
+                <p>Define your primary metric (what you're trying to move), guardrail metrics (what you can't break), minimum detectable effect, and required sample size. Calculate runtime before starting — running an underpowered experiment is a waste of infrastructure and decision-making confidence.</p>
+              </div>
+            </div>
+            <div class="pipeline-step">
+              <div class="step-num">02</div>
+              <div class="step-body">
+                <h4>Flag creation & traffic allocation</h4>
+                <p>Create the feature flag in your experiment platform with the bucketing configuration. Start with a small traffic slice — 1% or 5% — to catch any issues before you've affected a large user population.</p>
+              </div>
+            </div>
+            <div class="pipeline-step">
+              <div class="step-num">03</div>
+              <div class="step-body">
+                <h4>Instrumentation & event logging</h4>
+                <p>Every user action in the experiment context emits an event: <code>{user_id, experiment_id, variant, event_type, timestamp, metadata}</code>. These flow into your streaming pipeline (Kinesis, Kafka) and land in your analytics store (Redshift, BigQuery, Snowflake). This is the lifeblood of your analysis.</p>
+              </div>
+            </div>
+            <div class="pipeline-step">
+              <div class="step-num">04</div>
+              <div class="step-body">
+                <h4>Ramp & monitoring</h4>
+                <p>Gradually increase traffic allocation while watching real-time dashboards. At Amazon, we had automated anomaly detectors watching error rates, latency percentiles, and business metrics. If any guardrail spiked, the experiment auto-paused.</p>
+              </div>
+            </div>
+            <div class="pipeline-step">
+              <div class="step-num">05</div>
+              <div class="step-body">
+                <h4>Statistical analysis</h4>
+                <p>After the predetermined runtime, run your statistical tests. Compare primary metric distributions between control and treatment. Check for statistical significance and practical significance — a 0.001% lift that's statistically significant on 200M users is real, but is it worth the maintenance cost?</p>
+              </div>
+            </div>
+            <div class="pipeline-step">
+              <div class="step-num">06</div>
+              <div class="step-body">
+                <h4>Decision & cleanup</h4>
+                <p>Ship it, kill it, or iterate. If you ship: ramp to 100% and clean up the flag — dead flag branches are tech debt. If you kill it: document why. The institutional knowledge of failed experiments is as valuable as the wins.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="stats">
+          <h2>Statistical rigor: the part engineers skip</h2>
+          <p>Engineers love building the infrastructure. They're less enthusiastic about the statistics. But getting the math wrong is how you ship features that don't actually work — or worse, kill features that do.</p>
+
+          <h3>The t-test and why it's usually not enough</h3>
+          <p>The standard approach is a two-sample t-test comparing the mean of your metric between control and treatment. You're computing a p-value: the probability of observing a difference this large if the true effect were zero. If p &lt; 0.05, you declare significance.</p>
+          <p>Three things that will burn you if you're not careful:</p>
+
+          <div class="callout callout-warning">
+            <span class="callout-icon">⚠️</span>
+            <div>
+              <strong>Peeking problem</strong>
+              <p>Don't check results daily and stop the experiment the moment p &lt; 0.05. This is sequential testing and it inflates your false positive rate dramatically. Fix: use sequential testing methods (like mSPRT) or commit to a predetermined experiment duration before starting.</p>
+            </div>
+          </div>
+
+          <div class="callout callout-warning">
+            <span class="callout-icon">⚠️</span>
+            <div>
+              <strong>Multiple comparisons</strong>
+              <p>If you test 20 metrics, you'll get ~1 false positive at p=0.05 just by chance. Apply Bonferroni correction or the Benjamini-Hochberg procedure when testing multiple hypotheses simultaneously.</p>
+            </div>
+          </div>
+
+          <div class="callout callout-warning">
+            <span class="callout-icon">⚠️</span>
+            <div>
+              <strong>Network effects (SUTVA violation)</strong>
+              <p>The standard t-test assumes that one user's treatment doesn't affect another user's outcome (Stable Unit Treatment Value Assumption). In social products, this breaks down. If you're testing a notification feature, users in treatment might interact with users in control, leaking the effect. This requires cluster-based randomization or switchback experiments.</p>
+            </div>
+          </div>
+
+          <h3>What to actually measure</h3>
+          <p>For an ad rendering system like the one I worked on at Amazon, a typical experiment would track:</p>
+          <ul>
+            <li><strong>Primary:</strong> Click-through rate, ad revenue per thousand impressions (RPM)</li>
+            <li><strong>Engagement:</strong> Time-to-first-click, hover time, scroll depth past ad unit</li>
+            <li><strong>Guardrails:</strong> Page load time p50/p99, ad render error rate, layout shift score</li>
+            <li><strong>Counter-metrics:</strong> Ad block rate changes, immediate back-navigation rate</li>
+          </ul>
+          <p>The counter-metrics are critical. An ad format that lifts CTR but also lifts immediate back-navigation isn't actually helping — it's just tricking users into clicks they regret.</p>
+        </section>
+
+        <section id="safety">
+          <h2>Safety mechanisms in production</h2>
+          <p>The scariest moment in any experiment is the 5 minutes after you ramp from 10% to 50% traffic. You've just multiplied your exposure by 5x. Here's what needs to be in place:</p>
+
+          <div class="tech-grid">
+            <div class="tech-item">
+              <h4>Automated killswitch</h4>
+              <p>If error rate on the treatment arm exceeds the control arm by more than X%, or if latency p99 spikes beyond a threshold, automatically pause the experiment and alert on-call. This should be wired into your experiment platform, not a manual process.</p>
+            </div>
+            <div class="tech-item">
+              <h4>Holdout groups</h4>
+              <p>Reserve a small percentage of users (1–5%) who never see any experiment. This is your long-term control — it lets you measure the cumulative effect of all your experiments on the baseline user experience over months.</p>
+            </div>
+            <div class="tech-item">
+              <h4>Experiment isolation</h4>
+              <p>Two experiments touching the same UI element or the same backend codepath can create interaction effects. Maintain an experiment registry that flags potential conflicts before launch. At Amazon, this was a mandatory review step.</p>
+            </div>
+            <div class="tech-item">
+              <h4>Mutex groups</h4>
+              <p>For experiments that can't safely coexist, use mutex (mutually exclusive) groups — a user can only be enrolled in one experiment from the mutex group at a time. This sacrifices some statistical power but protects result validity.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="amazon">
+          <h2>What I saw at Amazon Advertising</h2>
+          <p>At Amazon's Sponsored Display team, the ad rendering service I worked on was running experiments constantly — on ad formats, ranking algorithms, bidding logic, rendering latency optimizations, and more. A few things I took away from that environment:</p>
+
+          <p><strong>The infrastructure investment is front-loaded.</strong> Building a reliable experiment platform — deterministic bucketing, event pipeline, analysis tooling, automated safety checks — takes months. But once it's in place, the marginal cost of running each additional experiment is low. The teams that invest in this infrastructure can run 10x more experiments than teams that do it ad-hoc.</p>
+
+          <p><strong>The p99 matters as much as the mean.</strong> When I was working on the rendering service that handled 1M TPS with p99 latency under 20ms, we couldn't afford to run experiments that improved average latency while degrading the tail. Our experiment framework had p99 latency as a mandatory guardrail metric — any experiment that moved it negatively was automatically paused.</p>
+
+          <p><strong>Distributed caching and experiments are friends.</strong> One of the patterns we used heavily was distributing the experiment assignment decision to the edge — computing variant assignments in the CDN layer before the request even hit our origin servers. This was possible because deterministic hashing is cheap and stateless. The variant assignment was just a header appended to the request.</p>
+
+          <p><strong>Negative results are results.</strong> About 60–70% of experiments at Amazon either showed no statistically significant effect or a negative one. That's normal. The value isn't just in shipping winners — it's in killing bad ideas quickly before they consume engineering resources.</p>
+        </section>
+
+        <section id="research">
+          <h2>From practice to research: cognitive architectures and experimentation</h2>
+          <p>My academic work on <a href="https://al-kindipublisher.com/index.php/jcsts/article/view/9812" target="_blank" rel="noopener">"Evolving the Modern Enterprise Stack: From Monoliths to Adaptive Cognitive Architectures"</a> (published in the Journal of Computer Science and Technology Studies, 2025) traces the evolution from monolithic systems through microservices to what I call <em>adaptive cognitive architecture</em>.</p>
+
+          <p>Experimentation infrastructure sits at an interesting inflection point in that evolution. In the monolith era, "experimentation" meant deploying a new build to a staging environment and manually validating it. In the microservices era, it became canary deployments and feature flags across distributed services. In the cognitive era, experimentation becomes something more interesting: the system itself learns from the experiment data in near-real-time, adjusting its own behavior through feedback loops that are too fast and too complex for a human to manually review.</p>
+
+          <p>This is where I see the next frontier: not just measuring experiment outcomes after the fact, but building systems that autonomously adjust experiment parameters — traffic splits, variant configurations, targeting criteria — based on live signals. An experiment framework that knows when to call a result early because the effect size is large enough. One that detects Simpson's paradox automatically and reweights cohorts. One that can run 1000 micro-experiments simultaneously on different dimensions of the same user experience.</p>
+
+          <p>The infrastructure principles remain the same — deterministic bucketing, clean event pipelines, statistical rigor. But the decision layer on top is evolving from human analysts to automated systems. The engineers who understand both the statistical foundations and the distributed systems implementation will be the ones building that layer.</p>
+        </section>
+
+        <section id="visualizer">
+          <h2>Try the live bucketing visualizer</h2>
+          <p>I built an interactive tool that lets you explore deterministic bucketing in real time. Enter any user ID and experiment name, and see exactly how the hash function maps that combination to a bucket position and variant assignment.</p>
+
+          <div class="visualizer-embed-card">
+            <div class="viz-card-content">
+              <div class="viz-icon">🧪</div>
+              <div class="viz-text">
+                <h4>A/B Bucket Explorer</h4>
+                <p>Enter user IDs and experiment names. Watch the deterministic hash place each user in a consistent bucket across the 0–100% allocation range. See how the same user always lands in the same variant — and how changing the experiment name reshuffles assignments.</p>
+                <a href="https://gouthamy.github.io/ab-bucket-explorer/ab-bucketing-visualizer.html" target="_blank" rel="noopener" class="viz-link">
+                  Open the Visualizer →
+                </a>
+              </div>
+            </div>
+            <div class="viz-preview">
+              <div class="viz-bar">
+                <div class="viz-segment seg-a">A<br/><small>0–33%</small></div>
+                <div class="viz-segment seg-b">B<br/><small>33–66%</small></div>
+                <div class="viz-segment seg-ctrl">Control<br/><small>66–100%</small></div>
+              </div>
+              <p class="viz-caption">Hash(userId + experimentId) mod 100 → bucket → variant</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="takeaways">
+          <h2>Key takeaways</h2>
+
+          <div class="takeaways-grid">
+            <div class="takeaway-card">
+              <div class="takeaway-num">01</div>
+              <p><strong>Deterministic hashing</strong> is the elegant solution to stateless, consistent user assignment at scale. Salt with experimentId for independent randomization across experiments.</p>
+            </div>
+            <div class="takeaway-card">
+              <div class="takeaway-num">02</div>
+              <p><strong>Feature flags decouple deployment from release.</strong> Code ships dark, then illuminates progressively — giving you control without ceremony.</p>
+            </div>
+            <div class="takeaway-card">
+              <div class="takeaway-num">03</div>
+              <p><strong>Guardrail metrics are non-negotiable.</strong> A primary metric win that breaks latency, error rate, or user trust isn't a win. Define them before the experiment starts.</p>
+            </div>
+            <div class="takeaway-card">
+              <div class="takeaway-num">04</div>
+              <p><strong>The statistics can lie to you</strong> if you peek, test too many metrics, or ignore network effects. Understand your test assumptions before you trust your p-values.</p>
+            </div>
+            <div class="takeaway-card">
+              <div class="takeaway-num">05</div>
+              <p><strong>Negative results are the system working.</strong> Killing bad ideas quickly is the ROI of experimentation infrastructure. Log the learnings — they're organizational capital.</p>
+            </div>
+            <div class="takeaway-card">
+              <div class="takeaway-num">06</div>
+              <p><strong>The future is autonomous experimentation.</strong> Systems that adjust their own experiments based on live signals. The infrastructure principles don't change — the decision layer does.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- AUTHOR CARD -->
+        <div class="author-card">
+          <div class="author-avatar">GY</div>
+          <div class="author-details">
+            <strong>Goutham Yenuganti</strong>
+            <span>Lead Member Technical Staff at Salesforce. Previously Amazon (Advertising, Appstore), SAP, PayPal. 14+ years building distributed systems and AI-native enterprise platforms. Published researcher on adaptive cognitive architectures.</span>
+            <div class="author-links">
+              <a href="https://www.linkedin.com/in/goutham-y-147b65108/" target="_blank" rel="noopener">LinkedIn →</a>
+              <a href="https://medium.com/@goutham.y_10934" target="_blank" rel="noopener">Medium →</a>
+              <a href="https://al-kindipublisher.com/index.php/jcsts/article/view/9812" target="_blank" rel="noopener">Research Paper →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- NEXT POST -->
+        <div class="next-posts">
+          <h3>More from Goutham</h3>
+          <div class="next-posts-grid">
+            <a href="#" class="next-post-card">
+              <span class="next-post-tag">Distributed Systems</span>
+              <h4>1M TPS at Sub-20ms: Architecture of Amazon's Ad Rendering Service</h4>
+              <span class="next-post-status">Coming Soon</span>
+            </a>
+            <a href="#" class="next-post-card">
+              <span class="next-post-tag">AI Architecture</span>
+              <h4>Building AI-Native ITSM: Knowledge Graphs Meet LLM Orchestration</h4>
+              <span class="next-post-status">Coming Soon</span>
+            </a>
+          </div>
+        </div>
+
+      </article>
+    </div>
+  </main>
+
+  <footer class="post-footer">
+    <div class="nav-inner">
+      <span class="footer-logo">{GY}</span>
+      <span>© 2025 Goutham Yenuganti</span>
+      <a href="../index.html">← Back to portfolio</a>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll progress
+    const bar = document.getElementById('scrollProgress');
+    window.addEventListener('scroll', () => {
+      bar.style.width = (window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100) + '%';
+    }, { passive: true });
+
+    // Nav scroll
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 30), { passive: true });
+
+    // TOC active link
+    const headings = document.querySelectorAll('section[id]');
+    const tocLinks = document.querySelectorAll('.toc a');
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          tocLinks.forEach(l => l.classList.remove('active'));
+          const active = document.querySelector(`.toc a[href="#${e.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+    headings.forEach(h => io.observe(h));
+  </script>
+</body>
+</html>
