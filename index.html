@@ -224,17 +224,20 @@
               <p>When I joined Amazon's Sponsored Display team, the ad rendering service was handling around 50K requests per second — already significant, but nowhere near what Amazon's ad business demanded. The system needed to scale 40x while handling the full complexity of ad personalization: dynamic product data, real-time bidding signals, device targeting, and creative optimization across Amazon.com, Amazon devices, and third-party sites.</p>
             </div>
             <div class="bt-action">
-              <span class="bt-context-label">What I architected</span>
-              <p>I was one of the core engineers who designed the <strong>end-to-end ad rendering pipeline</strong> — from customer interaction signals flowing in through Kinesis, through the real-time bidding and targeting layer, to the rendering service that assembled and served the final ad creative. Key architectural decisions: a <strong>distributed in-memory cache</strong> for Amazon product data (eliminating synchronous catalog calls on the hot path), re-architecture to native AWS (EC2, Lambda, Kinesis), and a self-debugging <strong>React operations tool</strong> that gave dependency teams visibility into the pipeline without engineering escalations.</p>
+              <span class="bt-context-label">The architectural decisions that made it happen</span>
+              <p><strong>Intel → Graviton (ARM):</strong> Made the call to migrate the entire rendering fleet to AWS Graviton processors and redesigned the Node.js worker lifecycle to exploit ARM's cost-performance ratio — the single decision that unlocked $2.5M in annualized savings.</p>
+              <p><strong>Java → Node.js runtime:</strong> Championed replacing Java with Node.js on the rendering hot path. Designed the worker lifecycle model to handle ad auction burst traffic using non-blocking I/O — reducing per-request memory while improving throughput.</p>
+              <p><strong>Cell-based architecture:</strong> Replaced a single monolithic US-region fleet of 5K+ servers with independent cells, each owning a partition of creative instructions with dynamic configuration. Eliminated cross-fleet blast radius and enabled per-cell scaling.</p>
+              <p><strong>Creative Ops Platform:</strong> Built a zero-to-one internal tool with dynamic metric alarms per creative, a prod→pre-prod request replay system for instant debugging, and feature flag toggles to kill a broken creative in seconds — no deployment. Took creative team testing from hours to minutes.</p>
             </div>
             <div class="bt-outcome">
-              <div class="bt-stat"><span>50K→2M</span><small>RPS scaled end-to-end</small></div>
-              <div class="bt-stat"><span>&lt;20ms</span><small>p99 latency</small></div>
-              <div class="bt-stat"><span>$8.7M</span><small>Combined revenue + savings</small></div>
+              <div class="bt-stat"><span>50K→2M</span><small>RPS scaled</small></div>
+              <div class="bt-stat"><span>$10M+</span><small>Revenue + savings</small></div>
+              <div class="bt-stat"><span>hrs→mins</span><small>Creative testing time</small></div>
             </div>
             <div class="bt-insight">
               <span class="bt-insight-icon">💡</span>
-              <p><strong>The lesson:</strong> At 2M TPS, every synchronous call is a liability. I moved Amazon product data access off the critical path entirely with a distributed cache layer — turning a potential 50ms catalog lookup into a sub-millisecond memory read. Architecture is about eliminating latency before it exists.</p>
+              <p><strong>The lesson:</strong> The biggest wins came from platform-level decisions, not feature work. Choosing ARM over Intel, Node.js over Java, cells over a monolithic fleet — each was a decision most engineers wouldn't have the confidence to make. Architectural courage compounds.</p>
             </div>
           </div>
         </div>
@@ -358,7 +361,7 @@
           </div>
         </div>
 
-        <div class="exp-card" data-reveal>
+        <div class="exp-card exp-amazon-featured" data-reveal>
           <div class="exp-card-top">
             <div class="exp-logo amz-logo">
               <svg viewBox="0 0 60 24" fill="none"><text x="0" y="18" font-family="Arial" font-weight="bold" font-size="18" fill="#FF9900">amazon</text></svg>
@@ -369,14 +372,52 @@
               <span class="exp-period">Nov 2019 – Jan 2025 · Seattle, WA</span>
             </div>
           </div>
-          <p class="exp-summary">Core engineer on the ad rendering platform serving Amazon.com, Amazon devices, and 3rd-party sites — one of the most revenue-critical systems at Amazon.</p>
+          <p class="exp-summary">Architect and core engineer on Amazon's ad rendering platform — one of the most revenue-critical systems in Amazon Advertising, serving dynamic display ads across Amazon.com, Amazon devices, and third-party sites. Scaled from 50K to 2M RPS, drove $10M+ in combined revenue and savings.</p>
           <div class="exp-metrics-row">
             <div class="exp-metric"><span>$6.2M</span><small>Revenue Impact</small></div>
-            <div class="exp-metric"><span>$2.5M</span><small>Cost Reduction</small></div>
+            <div class="exp-metric"><span>$4.3M</span><small>Cost Savings</small></div>
             <div class="exp-metric"><span>50K→2M</span><small>RPS Scaled</small></div>
           </div>
+          <div class="exp-highlights">
+            <div class="exp-highlight">
+              <span class="exp-highlight-icon">
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><rect x="2" y="4" width="16" height="12" rx="2"/><path d="M8 4V2M12 4V2M2 8h16"/></svg>
+              </span>
+              <div>
+                <strong>Intel → Graviton (ARM) Migration</strong>
+                <span>Made the key architectural call to migrate the rendering fleet from Intel to AWS Graviton processors — redesigning the Node.js worker lifecycle to fully exploit ARM's cost-performance profile. This decision was the primary driver of the $2.5M annualized infrastructure cost reduction.</span>
+              </div>
+            </div>
+            <div class="exp-highlight">
+              <span class="exp-highlight-icon">
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><circle cx="10" cy="10" r="3"/><path d="M10 2v3M10 15v3M2 10h3M15 10h3M4.2 4.2l2.1 2.1M13.7 13.7l2.1 2.1M4.2 15.8l2.1-2.1M13.7 6.3l2.1-2.1"/></svg>
+              </span>
+              <div>
+                <strong>Cell-Based Architecture</strong>
+                <span>Designed a cell-based rendering architecture — instead of a single US-region fleet of 5K+ servers, partitioned the system into independent cells each owning a partition of creative instructions. Eliminated blast radius on failures, enabled independent scaling per cell, and unlocked dynamic configuration per creative partition without fleet-wide deploys.</span>
+              </div>
+            </div>
+            <div class="exp-highlight">
+              <span class="exp-highlight-icon">
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><path d="M3 3h14v10H3z"/><path d="M7 17h6M10 13v4"/><path d="M7 7h2M11 7h2M7 10h6"/></svg>
+              </span>
+              <div>
+                <strong>Creative Ops Platform — Hours to Minutes</strong>
+                <span>Built a zero-to-one internal ops platform that transformed how creative teams work: (1) <strong>dynamic metric alarm creation</strong> per creative, eliminating manual CloudWatch setup; (2) <strong>one-stop failed request viewer</strong> with prod→pre-prod replay to reproduce issues without guesswork; (3) <strong>feature flag toggles</strong> to kill a problematic creative in seconds — no deployment required. Creative team testing time dropped from hours to minutes.</span>
+              </div>
+            </div>
+            <div class="exp-highlight">
+              <span class="exp-highlight-icon">
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><path d="M10 2L3 7v11h5v-5h4v5h5V7z"/></svg>
+              </span>
+              <div>
+                <strong>Java → Node.js Runtime Decision</strong>
+                <span>Championed the strategic shift from Java to Node.js as the rendering runtime — designed the Node.js worker lifecycle model for the ad serving hot path, leveraging its non-blocking I/O model to handle the burst traffic patterns of ad auctions at scale while reducing per-request memory footprint.</span>
+              </div>
+            </div>
+          </div>
           <div class="exp-stack">
-            <span>Java</span><span>Node.js</span><span>TypeScript</span><span>NestJS</span><span>React</span><span>DynamoDB</span><span>Kinesis</span><span>Memcached</span>
+            <span>Node.js</span><span>TypeScript</span><span>NestJS</span><span>Java</span><span>React</span><span>AWS Graviton</span><span>DynamoDB</span><span>Kinesis</span><span>Memcached</span><span>Cell Architecture</span>
           </div>
         </div>
 
