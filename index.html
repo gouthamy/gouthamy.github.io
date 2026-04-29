@@ -3,25 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Goutham Yenuganti — Staff Engineer</title>
-  <meta name="description" content="Goutham Yenuganti — Lead Member Technical Staff at Salesforce. 14+ years building scalable distributed systems, AI-native platforms, and enterprise backend architecture." />
+  <title>Goutham Yenuganti — Staff Engineer · AI Systems · Distributed Scale</title>
+  <meta name="description" content="Lead Member Technical Staff at Salesforce. 14+ years building systems at 1M TPS, delivering $10M+ impact. Now architecting AI-native enterprise platforms." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
+  <!-- SCROLL PROGRESS -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- CURSOR -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-follower" id="cursorFollower"></div>
+
   <!-- NAV -->
   <nav class="nav" id="nav">
     <div class="nav-inner">
-      <a href="#hero" class="nav-logo">GY</a>
-      <ul class="nav-links">
-        <li><a href="#about">About</a></li>
+      <a href="#hero" class="nav-logo">
+        <span class="logo-bracket">{</span>GY<span class="logo-bracket">}</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#impact">Impact</a></li>
         <li><a href="#experience">Experience</a></li>
-        <li><a href="#skills">Skills</a></li>
+        <li><a href="#expertise">Expertise</a></li>
         <li><a href="#blog">Blog</a></li>
-        <li><a href="#contact" class="nav-cta">Contact</a></li>
+        <li><a href="#contact" class="nav-cta">Let's Talk</a></li>
       </ul>
       <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
         <span></span><span></span><span></span>
@@ -31,91 +40,111 @@
 
   <!-- HERO -->
   <section class="hero" id="hero">
-    <div class="hero-bg">
-      <div class="hero-grid"></div>
-      <div class="hero-glow glow-1"></div>
-      <div class="hero-glow glow-2"></div>
-    </div>
+    <canvas class="hero-canvas" id="heroCanvas"></canvas>
     <div class="hero-content">
-      <div class="hero-badge">
-        <span class="badge-dot"></span>
-        Available for select opportunities
+      <div class="hero-eyebrow">
+        <span class="eyebrow-line"></span>
+        <span class="eyebrow-text">Lead Member Technical Staff · Salesforce · Bellevue, WA</span>
       </div>
-      <h1 class="hero-name">Goutham<br /><span class="gradient-text">Yenuganti</span></h1>
-      <p class="hero-title">Lead Member Technical Staff · Salesforce</p>
-      <p class="hero-tagline">14+ years architecting scalable distributed systems,<br />AI-native enterprise platforms &amp; knowledge graph intelligence.</p>
-      <div class="hero-stats">
-        <div class="stat">
-          <span class="stat-num">14+</span>
-          <span class="stat-label">Years Experience</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat">
-          <span class="stat-num">1M+</span>
-          <span class="stat-label">TPS Systems Built</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat">
-          <span class="stat-num">$10M+</span>
-          <span class="stat-label">Cost Savings Delivered</span>
-        </div>
+      <h1 class="hero-headline">
+        <span class="headline-top">Goutham</span>
+        <span class="headline-bottom">Yenuganti</span>
+      </h1>
+      <div class="hero-typewriter">
+        <span class="typewriter-prefix">I architect </span>
+        <span class="typewriter-text" id="typewriterText"></span>
+        <span class="typewriter-cursor">|</span>
       </div>
-      <div class="hero-actions">
-        <a href="#experience" class="btn btn-primary">View Work</a>
-        <a href="#contact" class="btn btn-ghost">Get in Touch</a>
+      <p class="hero-description">
+        14 years turning hard engineering problems into measurable outcomes —
+        from <strong>1M TPS ad systems at Amazon</strong> to
+        <strong>LLM-powered enterprise intelligence at Salesforce</strong>.
+      </p>
+      <div class="hero-pills">
+        <span class="pill">Distributed Systems</span>
+        <span class="pill">AI Orchestration</span>
+        <span class="pill">Knowledge Graphs</span>
+        <span class="pill">Backend Architecture</span>
+      </div>
+      <div class="hero-ctas">
+        <a href="#impact" class="cta-primary">
+          <span>See My Impact</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="mailto:goutham.y@hotmail.com" class="cta-secondary">goutham.y@hotmail.com</a>
       </div>
     </div>
-    <div class="hero-scroll">
-      <span>Scroll</span>
-      <div class="scroll-line"></div>
+    <div class="hero-companies">
+      <span class="companies-label">Career at</span>
+      <div class="companies-list">
+        <span class="co co-sf">Salesforce</span>
+        <span class="co-sep">·</span>
+        <span class="co co-amz">Amazon</span>
+        <span class="co-sep">·</span>
+        <span class="co co-sap">SAP</span>
+        <span class="co-sep">·</span>
+        <span class="co co-pp">PayPal</span>
+      </div>
+    </div>
+    <a href="#impact" class="hero-scroll-cue" aria-label="Scroll down">
+      <div class="scroll-mouse">
+        <div class="scroll-wheel"></div>
+      </div>
+    </a>
+  </section>
+
+  <!-- IMPACT -->
+  <section class="section impact" id="impact">
+    <div class="container">
+      <div class="impact-header">
+        <span class="section-tag">By The Numbers</span>
+        <h2>Engineering that moves <span class="gradient-text">the needle</span></h2>
+        <p>Real outcomes. Real scale. Numbers that belong in a board meeting.</p>
+      </div>
+      <div class="impact-grid">
+        <div class="impact-card big" data-count="6.2" data-suffix="M" data-prefix="$" data-label="Annual revenue improvement from redesigned ad rendering service at Amazon" data-company="Amazon Advertising">
+          <div class="impact-num"><span class="count-prefix">$</span><span class="count-val">0</span><span class="count-suffix">M</span></div>
+          <div class="impact-label">Revenue Impact</div>
+          <div class="impact-sub">Amazon Advertising</div>
+        </div>
+        <div class="impact-card big" data-count="4.3" data-suffix="M" data-prefix="$" data-label="Combined annualized infrastructure savings through re-architecture and IMR" data-company="Amazon">
+          <div class="impact-num"><span class="count-prefix">$</span><span class="count-val">0</span><span class="count-suffix">M</span></div>
+          <div class="impact-label">Cost Savings</div>
+          <div class="impact-sub">AWS Re-Architecture</div>
+        </div>
+        <div class="impact-card" data-count="1" data-suffix="M TPS" data-prefix="" data-label="Transactions per second with p99 latency under 20ms">
+          <div class="impact-num"><span class="count-prefix"></span><span class="count-val">0</span><span class="count-suffix">M TPS</span></div>
+          <div class="impact-label">Peak Throughput</div>
+          <div class="impact-sub">p99 &lt; 20ms</div>
+        </div>
+        <div class="impact-card" data-count="14" data-suffix="+" data-prefix="" data-label="Years of production engineering experience across tier-1 companies">
+          <div class="impact-num"><span class="count-prefix"></span><span class="count-val">0</span><span class="count-suffix">+</span></div>
+          <div class="impact-label">Years Experience</div>
+          <div class="impact-sub">Tier-1 Companies</div>
+        </div>
+        <div class="impact-card" data-count="10" data-suffix="hrs/wk" data-prefix="" data-label="Developer productivity saved through self-debugging React ops tool">
+          <div class="impact-num"><span class="count-prefix"></span><span class="count-val">0</span><span class="count-suffix">hrs/wk</span></div>
+          <div class="impact-label">Dev Time Saved</div>
+          <div class="impact-sub">Internal Tooling</div>
+        </div>
+        <div class="impact-card" data-count="2" data-suffix="x" data-prefix="" data-label="Double-digit Service Cloud growth through Slack-native AI service experiences">
+          <div class="impact-num"><span class="count-prefix"></span><span class="count-val">0</span><span class="count-suffix">x</span></div>
+          <div class="impact-label">Service Cloud Growth</div>
+          <div class="impact-sub">Salesforce GTM</div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- ABOUT -->
-  <section class="section about" id="about">
+  <!-- PHILOSOPHY -->
+  <section class="philosophy">
     <div class="container">
-      <div class="section-header">
-        <span class="section-tag">About</span>
-        <h2>Building systems that scale.</h2>
-      </div>
-      <div class="about-grid">
-        <div class="about-text">
-          <p>I'm a Staff-level engineer with deep expertise in backend architecture, distributed systems, and AI-native platform engineering. My career spans companies like <strong>Salesforce</strong>, <strong>Amazon</strong>, and <strong>SAP</strong>, where I've consistently delivered high-impact, revenue-generating systems at scale.</p>
-          <p>Currently at Salesforce, I lead end-to-end architecture for AI-native ITSM platforms — integrating LLM orchestration, retrieval-augmented reasoning, and enterprise knowledge graphs to automate employee service across millions of users.</p>
-          <p>I'm passionate about the intersection of <strong>distributed systems engineering</strong> and <strong>applied AI</strong> — designing infrastructure that not only handles scale but also drives measurable business outcomes.</p>
-          <div class="about-links">
-            <a href="https://www.linkedin.com/in/goutham-y-147b65108/" target="_blank" rel="noopener" class="about-link">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-              LinkedIn
-            </a>
-            <a href="mailto:goutham.y@hotmail.com" class="about-link">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-              Email
-            </a>
-          </div>
-        </div>
-        <div class="about-highlights">
-          <div class="highlight-card">
-            <div class="highlight-icon">⚡</div>
-            <h4>High-Performance Systems</h4>
-            <p>Designed services handling 1M+ TPS with sub-20ms p99 latency at Amazon Advertising.</p>
-          </div>
-          <div class="highlight-card">
-            <div class="highlight-icon">🧠</div>
-            <h4>AI-Native Architecture</h4>
-            <p>Building LLM orchestration, RAG pipelines, and knowledge graph intelligence at Salesforce.</p>
-          </div>
-          <div class="highlight-card">
-            <div class="highlight-icon">💰</div>
-            <h4>Business Impact</h4>
-            <p>Delivered $10M+ in cost savings and $6.2M revenue growth through architectural decisions.</p>
-          </div>
-          <div class="highlight-card">
-            <div class="highlight-icon">🌐</div>
-            <h4>Global Scale</h4>
-            <p>Systems serving millions of enterprise users across Amazon, Salesforce, and PayPal platforms.</p>
-          </div>
-        </div>
+      <div class="philosophy-inner">
+        <blockquote class="philosophy-quote">
+          "I don't just build services that scale —<br />
+          I build systems that <em>think</em>."
+        </blockquote>
+        <p class="philosophy-sub">Combining 14 years of distributed systems depth with the leading edge of AI orchestration to build enterprise platforms that reason, automate, and adapt.</p>
       </div>
     </div>
   </section>
@@ -125,200 +154,135 @@
     <div class="container">
       <div class="section-header">
         <span class="section-tag">Experience</span>
-        <h2>Career Timeline</h2>
+        <h2>Where I've built</h2>
       </div>
-      <div class="timeline">
+      <div class="exp-grid">
 
-        <!-- Salesforce -->
-        <div class="timeline-item" data-aos>
-          <div class="timeline-marker">
-            <div class="timeline-dot"></div>
-            <div class="timeline-line"></div>
+        <div class="exp-card exp-featured" data-reveal>
+          <div class="exp-card-top">
+            <div class="exp-badge current-badge">Current</div>
+            <div class="exp-logo sf-logo">
+              <svg viewBox="0 0 50 34" fill="none"><path d="M20.8 4.2c1.7-1.8 4.1-2.9 6.7-2.9 3.5 0 6.6 1.9 8.2 4.8.9-.4 1.9-.6 3-.6 3.9 0 7.1 3.2 7.1 7.1 0 .8-.1 1.5-.4 2.2 2.2 1.1 3.7 3.4 3.7 6 0 3.7-3 6.8-6.8 6.8H8.1C4.7 27.6 2 24.9 2 21.5c0-2.5 1.5-4.7 3.7-5.7-.2-.7-.3-1.4-.3-2.1 0-4.4 3.6-8 8-8 1.3 0 2.5.3 3.6.9.9-1 2.2-2.4 3.8-2.4z" fill="#00A1E0"/></svg>
+            </div>
+            <div class="exp-title-block">
+              <h3>Salesforce</h3>
+              <span class="exp-role">Lead Member Technical Staff</span>
+              <span class="exp-period">Jan 2025 – Present · Bellevue, WA</span>
+            </div>
           </div>
-          <div class="timeline-card featured">
-            <div class="card-header">
-              <div class="card-company">
-                <div class="company-logo salesforce-logo">SF</div>
-                <div>
-                  <h3>Salesforce</h3>
-                  <span class="card-location">Bellevue, WA</span>
-                </div>
-              </div>
-              <div class="card-meta">
-                <span class="card-role">Lead Member Technical Staff</span>
-                <span class="card-period">Jan 2025 – Present</span>
-                <span class="card-badge current">Current</span>
+          <p class="exp-summary">Leading architecture for AI-native ITSM — where LLM orchestration, knowledge graph intelligence, and enterprise-scale backend converge.</p>
+          <div class="exp-highlights">
+            <div class="exp-highlight">
+              <span class="exp-highlight-icon">🧠</span>
+              <div>
+                <strong>Knowledge Graph Architecture</strong>
+                <span>Unified CMDB, ITAM, HR &amp; ops telemetry into a semantic graph for AI reasoning and impact radius detection</span>
               </div>
             </div>
-            <p class="card-summary">Leading end-to-end system design for AI-native ITSM platforms integrating LLM orchestration, retrieval-augmented reasoning, and enterprise knowledge graphs powering proactive employee service automation at scale.</p>
-            <ul class="card-achievements">
-              <li>Architected <strong>Domain Intelligence &amp; Knowledge Graph layer</strong> modeling CMDB, ITAM, HR, and operational telemetry into a unified semantic graph with lifecycle state machines for contextual AI reasoning.</li>
-              <li>Designed and led development of <strong>Slack-embedded AI ITSM platform</strong>, integrating LLM orchestration, enterprise data grounding, and deterministic workflow engines for millions of enterprise users.</li>
-              <li>Built scalable microservices for ITAM, compliance, and procurement workflows across Field Service Cloud, Revenue Cloud, and Manufacturing Cloud.</li>
-              <li>Designed <strong>observability and AI telemetry pipelines</strong> capturing adoption metrics, automation rates, and model accuracy signals for iterative improvement.</li>
-              <li>Partnered with AI research, product, and GTM teams to define Slack-native AI-first service experiences, contributing to <strong>double-digit Service Cloud growth</strong>.</li>
-            </ul>
-            <div class="card-stack">
-              <span>Java</span><span>Node.js</span><span>Python</span><span>Apex</span><span>LWC</span><span>Salesforce Data Cloud</span><span>AWS</span><span>Memcached</span>
+            <div class="exp-highlight">
+              <span class="exp-highlight-icon">💬</span>
+              <div>
+                <strong>Slack-Embedded AI ITSM</strong>
+                <span>LLM orchestration + deterministic workflow engines serving millions of enterprise users</span>
+              </div>
             </div>
+            <div class="exp-highlight">
+              <span class="exp-highlight-icon">📈</span>
+              <div>
+                <strong>GTM &amp; Roadmap Influence</strong>
+                <span>Partnered with AI research, product &amp; GTM to drive double-digit Service Cloud growth</span>
+              </div>
+            </div>
+          </div>
+          <div class="exp-stack">
+            <span>Java</span><span>Node.js</span><span>Python</span><span>LLM Orchestration</span><span>RAG</span><span>Knowledge Graphs</span><span>Salesforce Data Cloud</span><span>AWS</span>
           </div>
         </div>
 
-        <!-- Amazon SDE -->
-        <div class="timeline-item" data-aos>
-          <div class="timeline-marker">
-            <div class="timeline-dot"></div>
-            <div class="timeline-line"></div>
+        <div class="exp-card" data-reveal>
+          <div class="exp-card-top">
+            <div class="exp-logo amz-logo">
+              <svg viewBox="0 0 60 24" fill="none"><text x="0" y="18" font-family="Arial" font-weight="bold" font-size="18" fill="#FF9900">amazon</text></svg>
+            </div>
+            <div class="exp-title-block">
+              <h3>Amazon</h3>
+              <span class="exp-role">SDE — Advertising · Sponsored Display</span>
+              <span class="exp-period">Nov 2019 – Jan 2025 · Seattle, WA</span>
+            </div>
           </div>
-          <div class="timeline-card">
-            <div class="card-header">
-              <div class="card-company">
-                <div class="company-logo amazon-logo">AMZ</div>
-                <div>
-                  <h3>Amazon</h3>
-                  <span class="card-location">Seattle, WA</span>
-                </div>
-              </div>
-              <div class="card-meta">
-                <span class="card-role">Software Development Engineer — Advertising</span>
-                <span class="card-period">Nov 2019 – Jan 2025</span>
-              </div>
-            </div>
-            <p class="card-summary">Core engineer on Amazon Advertising Sponsored Display team, building highly available services powering dynamic display ads across Amazon retail, devices, and third-party websites.</p>
-            <ul class="card-achievements">
-              <li>Designed advertising rendering service handling <strong>1M TPS with p99 latency &lt;20ms</strong>, generating up to $6.2M annual revenue improvement.</li>
-              <li>Re-architected rendering service to native AWS, achieving <strong>$2.5M annualized cost reduction</strong>.</li>
-              <li>Led infrastructure optimization effort delivering <strong>$1.8M IMR savings</strong>.</li>
-              <li>Designed and implemented distributed in-memory cache for Amazon product data access.</li>
-              <li>Introduced TypeScript and NestJS, improving code quality and developer experience.</li>
-              <li>Built React-based operations tool saving development teams <strong>10+ hours per week</strong> in debugging.</li>
-            </ul>
-            <div class="card-stack">
-              <span>Java</span><span>Node.js</span><span>TypeScript</span><span>React</span><span>DynamoDB</span><span>Kinesis</span><span>Memcached</span><span>AWS</span>
-            </div>
+          <p class="exp-summary">Core engineer on the ad rendering platform serving Amazon.com, Amazon devices, and 3rd-party sites — one of the most revenue-critical systems at Amazon.</p>
+          <div class="exp-metrics-row">
+            <div class="exp-metric"><span>$6.2M</span><small>Revenue Impact</small></div>
+            <div class="exp-metric"><span>$2.5M</span><small>Cost Reduction</small></div>
+            <div class="exp-metric"><span>1M TPS</span><small>Peak Traffic</small></div>
+          </div>
+          <div class="exp-stack">
+            <span>Java</span><span>Node.js</span><span>TypeScript</span><span>NestJS</span><span>React</span><span>DynamoDB</span><span>Kinesis</span><span>Memcached</span>
           </div>
         </div>
 
-        <!-- Amazon Appstore -->
-        <div class="timeline-item" data-aos>
-          <div class="timeline-marker">
-            <div class="timeline-dot"></div>
-            <div class="timeline-line"></div>
+        <div class="exp-card" data-reveal>
+          <div class="exp-card-top">
+            <div class="exp-logo amz-logo">
+              <svg viewBox="0 0 60 24" fill="none"><text x="0" y="18" font-family="Arial" font-weight="bold" font-size="18" fill="#FF9900">amazon</text></svg>
+            </div>
+            <div class="exp-title-block">
+              <h3>Amazon</h3>
+              <span class="exp-role">SDE II — Appstore</span>
+              <span class="exp-period">Apr 2018 – Oct 2019 · Chennai, India</span>
+            </div>
           </div>
-          <div class="timeline-card">
-            <div class="card-header">
-              <div class="card-company">
-                <div class="company-logo amazon-logo">AMZ</div>
-                <div>
-                  <h3>Amazon</h3>
-                  <span class="card-location">Chennai, India</span>
-                </div>
-              </div>
-              <div class="card-meta">
-                <span class="card-role">SDE II — Appstore</span>
-                <span class="card-period">Apr 2018 – Oct 2019</span>
-              </div>
-            </div>
-            <p class="card-summary">Designed and developed large-scale systems for Amazon Appstore serving millions of Tablet, Fire TV, and Android devices.</p>
-            <ul class="card-achievements">
-              <li>Led development of <strong>App Bundle feature</strong> for Fire TV, enabling one-click multi-app downloads.</li>
-              <li>Built shared components and services across millions of Amazon and Android devices.</li>
-              <li>Designed and implemented <strong>Multi-Factor Authentication for EU Marketplaces</strong> for compliance.</li>
-              <li>Developed Nexus Library for App Store analytics, enabling marketing data-driven decisions.</li>
-            </ul>
-            <div class="card-stack">
-              <span>Android</span><span>Java</span><span>Dagger 2</span><span>DynamoDB</span><span>Microservices</span><span>AWS</span>
-            </div>
+          <p class="exp-summary">Platform engineer for Amazon Appstore — components and services running on millions of Kindle, Fire TV, and Android devices globally.</p>
+          <div class="exp-highlights-inline">
+            <span>App Bundle Feature (Fire TV)</span>
+            <span>MFA for EU Marketplaces</span>
+            <span>Nexus Analytics Library</span>
+          </div>
+          <div class="exp-stack">
+            <span>Android</span><span>Java</span><span>Dagger 2</span><span>DynamoDB</span><span>Microservices</span>
           </div>
         </div>
 
-        <!-- SAP Ariba -->
-        <div class="timeline-item" data-aos>
-          <div class="timeline-marker">
-            <div class="timeline-dot"></div>
-            <div class="timeline-line"></div>
+        <div class="exp-card exp-small" data-reveal>
+          <div class="exp-card-top">
+            <div class="exp-logo sap-logo-sm">SAP</div>
+            <div class="exp-title-block">
+              <h3>SAP Ariba</h3>
+              <span class="exp-role">Developer T3.2</span>
+              <span class="exp-period">Aug 2017 – Mar 2018 · Bangalore</span>
+            </div>
           </div>
-          <div class="timeline-card">
-            <div class="card-header">
-              <div class="card-company">
-                <div class="company-logo sap-logo">SAP</div>
-                <div>
-                  <h3>SAP Ariba</h3>
-                  <span class="card-location">Bangalore, India</span>
-                </div>
-              </div>
-              <div class="card-meta">
-                <span class="card-role">Developer (T3.2)</span>
-                <span class="card-period">Aug 2017 – Mar 2018</span>
-              </div>
-            </div>
-            <p class="card-summary">Developer on Ariba Network — enabling buyer-supplier collaboration, procurement transformation, and cash flow improvement.</p>
-            <ul class="card-achievements">
-              <li>Implemented delegator-delegate feature for the SAP procurement tool.</li>
-              <li>Redesigned the approval flow management system using Spring Boot.</li>
-              <li>Implemented RESTful web services with high availability and low latency.</li>
-            </ul>
-            <div class="card-stack">
-              <span>Java</span><span>Spring Boot</span><span>Hibernate</span><span>Oracle</span><span>REST</span>
-            </div>
+          <div class="exp-stack">
+            <span>Java</span><span>Spring Boot</span><span>Hibernate</span><span>Oracle</span>
           </div>
         </div>
 
-        <!-- PayPal / DXC -->
-        <div class="timeline-item" data-aos>
-          <div class="timeline-marker">
-            <div class="timeline-dot"></div>
-            <div class="timeline-line"></div>
+        <div class="exp-card exp-small" data-reveal>
+          <div class="exp-card-top">
+            <div class="exp-logo pp-logo-sm">PP</div>
+            <div class="exp-title-block">
+              <h3>PayPal <span class="via">via DXC</span></h3>
+              <span class="exp-role">Software Developer — Regulatory Risk</span>
+              <span class="exp-period">May 2016 – Jul 2017 · Chennai</span>
+            </div>
           </div>
-          <div class="timeline-card">
-            <div class="card-header">
-              <div class="card-company">
-                <div class="company-logo paypal-logo">PP</div>
-                <div>
-                  <h3>PayPal <span class="via-employer">via DXC Technology</span></h3>
-                  <span class="card-location">Chennai, India</span>
-                </div>
-              </div>
-              <div class="card-meta">
-                <span class="card-role">Software Developer</span>
-                <span class="card-period">May 2016 – Jul 2017</span>
-              </div>
-            </div>
-            <p class="card-summary">SDE on Regulatory Platform Technology (RPT) — financial compliance, risk assessment, and anti-money laundering systems for PayPal.</p>
-            <ul class="card-achievements">
-              <li>Built microservice components scanning <strong>millions of customer profiles</strong> using Apache Lucene and Levenshtein distance algorithm.</li>
-              <li>Developed Node.js web app for regulatory bodies to access high-risk transaction reports.</li>
-              <li>Reduced scan time complexity via indexing and batch processing of world-check files.</li>
-            </ul>
-            <div class="card-stack">
-              <span>Java</span><span>Node.js</span><span>Lucene</span><span>Elasticsearch</span><span>MongoDB</span><span>Spring</span><span>Oracle</span>
-            </div>
+          <p class="exp-summary-sm">Anti-money laundering compliance platform scanning millions of profiles using Apache Lucene + Levenshtein distance algorithms.</p>
+          <div class="exp-stack">
+            <span>Java</span><span>Node.js</span><span>Lucene</span><span>Elasticsearch</span><span>MongoDB</span>
           </div>
         </div>
 
-        <!-- HTC Global -->
-        <div class="timeline-item" data-aos>
-          <div class="timeline-marker">
-            <div class="timeline-dot"></div>
+        <div class="exp-card exp-small" data-reveal>
+          <div class="exp-card-top">
+            <div class="exp-logo htc-logo-sm">HTC</div>
+            <div class="exp-title-block">
+              <h3>HTC Global Services</h3>
+              <span class="exp-role">Software Development Engineer</span>
+              <span class="exp-period">Apr 2012 – May 2016 · Chennai</span>
+            </div>
           </div>
-          <div class="timeline-card">
-            <div class="card-header">
-              <div class="card-company">
-                <div class="company-logo htc-logo">HTC</div>
-                <div>
-                  <h3>HTC Global Services</h3>
-                  <span class="card-location">Chennai, India</span>
-                </div>
-              </div>
-              <div class="card-meta">
-                <span class="card-role">Software Development Engineer</span>
-                <span class="card-period">Apr 2012 – May 2016</span>
-              </div>
-            </div>
-            <p class="card-summary">Developer on EBAP — an enterprise ERP application covering HR, Administration, Finance, Purchase, and Payroll modules.</p>
-            <div class="card-stack">
-              <span>Java</span><span>J2EE</span><span>Spring</span><span>Hibernate</span><span>Oracle</span>
-            </div>
+          <div class="exp-stack">
+            <span>Java</span><span>J2EE</span><span>Spring</span><span>Oracle</span>
           </div>
         </div>
 
@@ -326,134 +290,73 @@
     </div>
   </section>
 
-  <!-- SKILLS -->
-  <section class="section skills" id="skills">
+  <!-- EXPERTISE -->
+  <section class="section expertise" id="expertise">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Skills</span>
-        <h2>Technical Expertise</h2>
+        <span class="section-tag">Expertise</span>
+        <h2>What I bring to the table</h2>
       </div>
-      <div class="skills-grid">
-
-        <div class="skill-category" data-aos>
-          <h4><span class="skill-icon">⚙️</span> Languages</h4>
-          <div class="skill-tags">
-            <span class="skill-tag expert">Java / J2EE</span>
-            <span class="skill-tag expert">Node.js</span>
-            <span class="skill-tag expert">JavaScript</span>
-            <span class="skill-tag proficient">TypeScript</span>
-            <span class="skill-tag proficient">Python</span>
-            <span class="skill-tag proficient">Apex</span>
-          </div>
-        </div>
-
-        <div class="skill-category" data-aos>
-          <h4><span class="skill-icon">🔧</span> Frameworks &amp; Libraries</h4>
-          <div class="skill-tags">
-            <span class="skill-tag expert">Spring / Spring Boot</span>
-            <span class="skill-tag expert">Hibernate</span>
-            <span class="skill-tag proficient">NestJS</span>
-            <span class="skill-tag proficient">ReactJS</span>
-            <span class="skill-tag proficient">Dagger 2</span>
-            <span class="skill-tag proficient">Android SDK</span>
-            <span class="skill-tag proficient">LWC</span>
-            <span class="skill-tag proficient">Kafka</span>
-          </div>
-        </div>
-
-        <div class="skill-category" data-aos>
-          <h4><span class="skill-icon">🗄️</span> Databases &amp; Storage</h4>
-          <div class="skill-tags">
-            <span class="skill-tag expert">DynamoDB</span>
-            <span class="skill-tag expert">MongoDB</span>
-            <span class="skill-tag expert">Elasticsearch</span>
-            <span class="skill-tag proficient">Oracle</span>
-            <span class="skill-tag proficient">Cassandra</span>
-            <span class="skill-tag proficient">Memcached</span>
-          </div>
-        </div>
-
-        <div class="skill-category" data-aos>
-          <h4><span class="skill-icon">☁️</span> Cloud &amp; Infrastructure</h4>
-          <div class="skill-tags">
-            <span class="skill-tag expert">AWS (EC2, Lambda, Kinesis)</span>
-            <span class="skill-tag expert">Microservices</span>
-            <span class="skill-tag expert">RESTful APIs</span>
-            <span class="skill-tag proficient">Salesforce Data Cloud</span>
-            <span class="skill-tag proficient">GitHub</span>
-            <span class="skill-tag proficient">Jenkins</span>
-          </div>
-        </div>
-
-        <div class="skill-category" data-aos>
-          <h4><span class="skill-icon">🧠</span> AI &amp; Data</h4>
-          <div class="skill-tags">
-            <span class="skill-tag expert">LLM Orchestration</span>
-            <span class="skill-tag expert">RAG Pipelines</span>
-            <span class="skill-tag expert">Knowledge Graphs</span>
-            <span class="skill-tag proficient">AI Telemetry</span>
-            <span class="skill-tag proficient">Apache Lucene</span>
-            <span class="skill-tag proficient">Semantic Search</span>
-          </div>
-        </div>
-
-        <div class="skill-category" data-aos>
-          <h4><span class="skill-icon">🏛️</span> Architecture</h4>
-          <div class="skill-tags">
-            <span class="skill-tag expert">Distributed Systems</span>
-            <span class="skill-tag expert">System Design</span>
-            <span class="skill-tag expert">Backend Architecture</span>
-            <span class="skill-tag proficient">Algorithms &amp; DSA</span>
-            <span class="skill-tag proficient">High Availability</span>
-            <span class="skill-tag proficient">Observability</span>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="certs-section">
-        <h3>Certifications &amp; Courses</h3>
-        <div class="certs-grid">
-          <div class="cert-card">
-            <div class="cert-icon">☕</div>
-            <div>
-              <strong>Oracle Certified Associate</strong>
-              <span>Java SE8 Programmer</span>
+      <div class="expertise-layout">
+        <div class="expertise-areas">
+          <div class="area-card active" data-area="0" data-reveal>
+            <div class="area-icon">⚡</div>
+            <div class="area-body">
+              <h4>Distributed Systems at Scale</h4>
+              <p>Designing systems that handle millions of concurrent requests with p99 latencies in milliseconds. From in-memory caches to global microservice meshes.</p>
+              <div class="area-techs"><span>Java</span><span>Node.js</span><span>Microservices</span><span>Kafka</span><span>DynamoDB</span><span>Cassandra</span><span>Memcached</span></div>
             </div>
           </div>
-          <div class="cert-card">
-            <div class="cert-icon">🍃</div>
-            <div>
-              <strong>MongoDB for Java Developers</strong>
-              <span>MongoDB University</span>
+          <div class="area-card" data-area="1" data-reveal>
+            <div class="area-icon">🧠</div>
+            <div class="area-body">
+              <h4>AI-Native Platform Engineering</h4>
+              <p>Building the infrastructure layer for enterprise AI — LLM orchestration pipelines, retrieval-augmented systems, and knowledge graphs that ground AI in real enterprise data.</p>
+              <div class="area-techs"><span>LLM Orchestration</span><span>RAG</span><span>Knowledge Graphs</span><span>Vector Search</span><span>AI Telemetry</span></div>
             </div>
           </div>
-          <div class="cert-card">
-            <div class="cert-icon">🌿</div>
-            <div>
-              <strong>MongoDB for Node.js</strong>
-              <span>MongoDB University</span>
+          <div class="area-card" data-area="2" data-reveal>
+            <div class="area-icon">🏗️</div>
+            <div class="area-body">
+              <h4>Backend Architecture &amp; System Design</h4>
+              <p>End-to-end system design from data models to API contracts. Lifecycle state machines, configuration-safe resolution models, and cross-domain workflow orchestration.</p>
+              <div class="area-techs"><span>System Design</span><span>Spring Boot</span><span>REST APIs</span><span>Hibernate</span><span>Elasticsearch</span><span>MongoDB</span></div>
             </div>
           </div>
-          <div class="cert-card">
-            <div class="cert-icon">📚</div>
-            <div>
-              <strong>Algorithms Toolbox</strong>
-              <span>Coursera / UC San Diego</span>
+          <div class="area-card" data-area="3" data-reveal>
+            <div class="area-icon">☁️</div>
+            <div class="area-body">
+              <h4>Cloud Infrastructure &amp; Observability</h4>
+              <p>Native AWS architectures, infrastructure cost optimization, and AI telemetry pipelines that capture adoption metrics, automation rates, and model accuracy signals.</p>
+              <div class="area-techs"><span>AWS</span><span>DynamoDB</span><span>Kinesis</span><span>Lambda</span><span>Observability</span><span>Jenkins</span></div>
             </div>
           </div>
-          <div class="cert-card">
-            <div class="cert-icon">⚡</div>
-            <div>
-              <strong>Java Multithreading</strong>
-              <span>Online Certification</span>
-            </div>
+        </div>
+        <div class="expertise-certs">
+          <h3>Certifications</h3>
+          <div class="cert-list">
+            <div class="cert-item"><span class="cert-dot"></span><strong>Oracle Certified Associate</strong> — Java SE8 Programmer</div>
+            <div class="cert-item"><span class="cert-dot"></span><strong>MongoDB for Java Developers</strong> — MongoDB University</div>
+            <div class="cert-item"><span class="cert-dot"></span><strong>MongoDB for Node.js</strong> — MongoDB University</div>
+            <div class="cert-item"><span class="cert-dot"></span><strong>Algorithms Toolbox</strong> — Coursera / UC San Diego</div>
+            <div class="cert-item"><span class="cert-dot"></span><strong>Java Multithreading</strong></div>
+            <div class="cert-item"><span class="cert-dot"></span><strong>Linux Web Servers</strong> — Udacity</div>
           </div>
-          <div class="cert-card">
-            <div class="cert-icon">🐧</div>
-            <div>
-              <strong>Linux Web Servers</strong>
-              <span>Udacity</span>
+          <div class="awards-block">
+            <h3>Awards</h3>
+            <div class="award-item">
+              <span class="award-icon">🏆</span>
+              <div>
+                <strong>Spot Hero Award</strong>
+                <span>Amazon · Q3 2023</span>
+              </div>
+            </div>
+            <div class="award-item">
+              <span class="award-icon">⭐</span>
+              <div>
+                <strong>Best Performer Q2</strong>
+                <span>HTC Global Services · 2015</span>
+              </div>
             </div>
           </div>
         </div>
@@ -465,74 +368,59 @@
   <section class="section blog" id="blog">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Blog</span>
-        <h2>Thoughts &amp; Writing</h2>
-        <p class="section-subtitle">Technical deep-dives on distributed systems, AI architecture, and engineering leadership.</p>
+        <span class="section-tag">Writing</span>
+        <h2>Technical perspectives</h2>
+        <p class="section-desc">Deep-dives on distributed systems, AI platform architecture, and engineering at scale.</p>
       </div>
       <div class="blog-grid">
-
-        <article class="blog-card featured-post" data-aos>
-          <div class="blog-card-inner">
-            <div class="blog-tags">
-              <span class="blog-tag">AI Architecture</span>
-              <span class="blog-tag">ITSM</span>
-            </div>
+        <article class="blog-card blog-featured" data-reveal>
+          <div class="blog-number">01</div>
+          <div class="blog-content">
+            <div class="blog-tags"><span>AI Architecture</span><span>ITSM</span></div>
             <h3>Building AI-Native ITSM: Knowledge Graphs Meet LLM Orchestration</h3>
-            <p>How we modeled CMDB, ITAM, HR, and operational telemetry into a unified semantic graph to enable contextual AI reasoning and cross-domain workflow automation at enterprise scale.</p>
-            <div class="blog-footer">
-              <span class="blog-date">Coming soon</span>
-              <span class="blog-read">8 min read</span>
+            <p>How we unified CMDB, ITAM, HR, and ops telemetry into a semantic graph to enable contextual AI reasoning, impact radius detection, and cross-domain automation at enterprise scale.</p>
+            <div class="blog-meta">
+              <span class="blog-status coming">Coming Soon</span>
+              <span>8 min read</span>
             </div>
           </div>
         </article>
-
-        <article class="blog-card" data-aos>
-          <div class="blog-card-inner">
-            <div class="blog-tags">
-              <span class="blog-tag">Distributed Systems</span>
-            </div>
-            <h3>1M TPS at Sub-20ms: Designing Amazon's Advertising Rendering Service</h3>
-            <p>A deep-dive into the architecture decisions that enabled handling 1 million transactions per second while maintaining p99 latency under 20ms in production.</p>
-            <div class="blog-footer">
-              <span class="blog-date">Coming soon</span>
-              <span class="blog-read">10 min read</span>
+        <article class="blog-card" data-reveal>
+          <div class="blog-number">02</div>
+          <div class="blog-content">
+            <div class="blog-tags"><span>Distributed Systems</span><span>AWS</span></div>
+            <h3>1M TPS at Sub-20ms: Architecture of Amazon's Ad Rendering Service</h3>
+            <p>The architectural decisions, caching strategies, and infrastructure choices behind a system serving 1 million requests per second with single-digit millisecond latency.</p>
+            <div class="blog-meta">
+              <span class="blog-status coming">Coming Soon</span>
+              <span>10 min read</span>
             </div>
           </div>
         </article>
-
-        <article class="blog-card" data-aos>
-          <div class="blog-card-inner">
-            <div class="blog-tags">
-              <span class="blog-tag">Cost Optimization</span>
-              <span class="blog-tag">AWS</span>
-            </div>
-            <h3>How We Saved $2.5M/Year by Re-Architecting to Native AWS</h3>
-            <p>Lessons learned from migrating a high-traffic rendering service to a native AWS environment — the trade-offs, the surprises, and the savings.</p>
-            <div class="blog-footer">
-              <span class="blog-date">Coming soon</span>
-              <span class="blog-read">7 min read</span>
+        <article class="blog-card" data-reveal>
+          <div class="blog-number">03</div>
+          <div class="blog-content">
+            <div class="blog-tags"><span>Cost Engineering</span></div>
+            <h3>Saving $2.5M/Year: A Playbook for AWS Re-Architecture</h3>
+            <p>From identifying waste to executing a zero-downtime migration to native AWS — a step-by-step account of the technical and organizational decisions that cut $2.5M annually.</p>
+            <div class="blog-meta">
+              <span class="blog-status coming">Coming Soon</span>
+              <span>7 min read</span>
             </div>
           </div>
         </article>
-
-        <article class="blog-card" data-aos>
-          <div class="blog-card-inner">
-            <div class="blog-tags">
-              <span class="blog-tag">Developer Experience</span>
-            </div>
-            <h3>TypeScript + NestJS: Bringing Structure to Node.js at Scale</h3>
-            <p>Why we introduced TypeScript and NestJS to a large Node.js service, what changed in code quality and team velocity, and what I'd do differently.</p>
-            <div class="blog-footer">
-              <span class="blog-date">Coming soon</span>
-              <span class="blog-read">5 min read</span>
+        <article class="blog-card" data-reveal>
+          <div class="blog-number">04</div>
+          <div class="blog-content">
+            <div class="blog-tags"><span>Developer Experience</span></div>
+            <h3>Why We Chose TypeScript + NestJS Over Plain Node.js at Scale</h3>
+            <p>The practical gains in code quality, onboarding speed, and long-term maintainability when you bring strong typing and structure to a large Node.js service.</p>
+            <div class="blog-meta">
+              <span class="blog-status coming">Coming Soon</span>
+              <span>5 min read</span>
             </div>
           </div>
         </article>
-
-      </div>
-      <div class="blog-cta">
-        <p>Blog posts coming soon. Follow on LinkedIn for updates.</p>
-        <a href="https://www.linkedin.com/in/goutham-y-147b65108/" target="_blank" rel="noopener" class="btn btn-ghost">Follow on LinkedIn →</a>
       </div>
     </div>
   </section>
@@ -540,31 +428,42 @@
   <!-- CONTACT -->
   <section class="section contact" id="contact">
     <div class="container">
-      <div class="contact-inner">
-        <div class="section-header">
+      <div class="contact-wrapper">
+        <div class="contact-left">
           <span class="section-tag">Contact</span>
-          <h2>Let's Connect</h2>
-          <p class="section-subtitle">Open to conversations about engineering leadership, AI platform architecture, and select opportunities.</p>
+          <h2>Let's build<br />something<br /><span class="gradient-text">remarkable.</span></h2>
+          <p>Open to conversations about staff+ engineering roles, AI platform architecture, distributed systems challenges, and advisory opportunities.</p>
         </div>
-        <div class="contact-links">
-          <a href="mailto:goutham.y@hotmail.com" class="contact-card">
-            <div class="contact-icon">
+        <div class="contact-right">
+          <a href="mailto:goutham.y@hotmail.com" class="contact-item" data-reveal>
+            <div class="contact-icon-wrap">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
             </div>
-            <div>
+            <div class="contact-info">
               <strong>Email</strong>
               <span>goutham.y@hotmail.com</span>
             </div>
+            <svg class="contact-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
-          <a href="https://www.linkedin.com/in/goutham-y-147b65108/" target="_blank" rel="noopener" class="contact-card">
-            <div class="contact-icon">
+          <a href="https://www.linkedin.com/in/goutham-y-147b65108/" target="_blank" rel="noopener" class="contact-item" data-reveal>
+            <div class="contact-icon-wrap">
               <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
             </div>
-            <div>
+            <div class="contact-info">
               <strong>LinkedIn</strong>
               <span>goutham-y-147b65108</span>
             </div>
+            <svg class="contact-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
+          <div class="contact-item static" data-reveal>
+            <div class="contact-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div class="contact-info">
+              <strong>Location</strong>
+              <span>Monroe, WA · Open to Remote</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -574,9 +473,13 @@
   <footer class="footer">
     <div class="container">
       <div class="footer-inner">
-        <span class="footer-name">Goutham Yenuganti</span>
-        <span class="footer-copy">© 2025 · Monroe, WA</span>
-        <span class="footer-built">Built with care, no frameworks</span>
+        <div class="footer-left">
+          <span class="footer-logo">{GY}</span>
+          <span>Goutham Yenuganti · Staff Engineer</span>
+        </div>
+        <div class="footer-right">
+          <span>© 2025 · Built with intent, no frameworks</span>
+        </div>
       </div>
     </div>
   </footer>
