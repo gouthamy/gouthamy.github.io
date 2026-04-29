@@ -33,9 +33,15 @@
         <li><a href="#blog">Blog</a></li>
         <li><a href="#contact" class="nav-cta">Let's Talk</a></li>
       </ul>
-      <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
-      </button>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+        <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
     </div>
   </nav>
 
@@ -57,10 +63,9 @@
         <span class="typewriter-cursor">|</span>
       </div>
       <p class="hero-description">
-        I architect systems that scale and solve problems that stump teams.
         Currently building <strong>AI-native enterprise intelligence</strong> at Salesforce.
-        Previously — <strong>2M TPS ad systems</strong> at Amazon,
-        <strong>20+ microservices designed solo</strong> at PayPal.
+        Before that — <strong>2M RPS ad rendering</strong> at Amazon,
+        <strong>20+ microservices solo</strong> at PayPal.
         And early in my career, I did what 20 teams couldn't in 5 years:
         <strong>migrated 150+ enterprise apps off a $1M/year licensed platform — alone.</strong>
       </p>
@@ -86,9 +91,11 @@
         <span class="co-sep">·</span>
         <span class="co co-amz">Amazon</span>
         <span class="co-sep">·</span>
+        <span class="co co-pp">PayPal</span>
+        <span class="co-sep">·</span>
         <span class="co co-sap">SAP</span>
         <span class="co-sep">·</span>
-        <span class="co co-pp">PayPal</span>
+        <span class="co co-htc">HTC</span>
       </div>
     </div>
     <a href="#impact" class="hero-scroll-cue" aria-label="Scroll down">
@@ -167,56 +174,6 @@
         <div class="bt-card" data-reveal>
           <div class="bt-number">01</div>
           <div class="bt-body">
-            <div class="bt-company">HTC Global Services · 2012–2016</div>
-            <h3 class="bt-title">The Problem 20 Teams Couldn't Crack in 5 Years</h3>
-            <div class="bt-context">
-              <span class="bt-context-label">The situation</span>
-              <p>HTC had a fleet of 150+ desktop applications built on a proprietary licensed image processing framework. The annual licence cost was enormous — over $1M. For five years, team after team had tried to migrate to open-source. All 20+ attempts failed. The project was considered technically impossible internally.</p>
-            </div>
-            <div class="bt-action">
-              <span class="bt-context-label">What I did differently</span>
-              <p>I approached it as an architecture problem, not a migration problem. Instead of trying to swap one framework for another, I designed a new abstraction layer using <strong>JavaFX</strong> — building a custom rendering engine that replicated the proprietary API surface while running entirely on open-source foundations. I built and shipped all 150+ applications on the new platform alone.</p>
-            </div>
-            <div class="bt-outcome">
-              <div class="bt-stat"><span>$1M+</span><small>Annual licence cost eliminated</small></div>
-              <div class="bt-stat"><span>150+</span><small>Desktop apps migrated</small></div>
-              <div class="bt-stat"><span>1</span><small>Engineer. Solved alone.</small></div>
-            </div>
-            <div class="bt-insight">
-              <span class="bt-insight-icon">💡</span>
-              <p><strong>The lesson:</strong> When everyone fails at the same approach, the problem isn't the execution — it's the framing. I reframed the migration as a platform architecture challenge, which made the solution obvious.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="bt-card" data-reveal>
-          <div class="bt-number">02</div>
-          <div class="bt-body">
-            <div class="bt-company">PayPal via DXC Technology · 2016–2017</div>
-            <h3 class="bt-title">From Monolith to 20+ Microservices: Designing PayPal's Regulatory Platform from Scratch</h3>
-            <div class="bt-context">
-              <span class="bt-context-label">The situation</span>
-              <p>PayPal's Regulatory Platform Technology (RPT) was a monolithic Java application responsible for scanning millions of customer profiles for financial crime — money laundering, terrorist financing, sanctions violations. It was slow, brittle, and couldn't scale to the velocity PayPal needed.</p>
-            </div>
-            <div class="bt-action">
-              <span class="bt-context-label">What I designed and built</span>
-              <p>I designed the entire microservices architecture for RPT from the ground up — decomposing the monolith into <strong>20+ independent services</strong>, each owning a bounded context of the regulatory domain. Key technical choices I made: <strong>Apache Lucene + Levenshtein edit distance</strong> for fuzzy name matching against sanctions watchlists (tolerating transliteration errors in international names), batch-indexed world-check file processing to reduce scan time complexity from O(n²) to near-linear, and a Node.js web interface for regulatory body access to high-risk transaction data.</p>
-            </div>
-            <div class="bt-outcome">
-              <div class="bt-stat"><span>20+</span><small>Microservices designed solo</small></div>
-              <div class="bt-stat"><span>Millions</span><small>Customer profiles scanned</small></div>
-              <div class="bt-stat"><span>O(n²)→O(n)</span><small>Scan complexity reduction</small></div>
-            </div>
-            <div class="bt-insight">
-              <span class="bt-insight-icon">💡</span>
-              <p><strong>The lesson:</strong> Fuzzy matching in financial compliance isn't a nice-to-have — "Muammar Gaddafi" has over 112 documented transliterations in sanctions databases. Choosing the right algorithm (edit distance) over the obvious one (exact match) was the architectural decision that made the whole system viable.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="bt-card" data-reveal>
-          <div class="bt-number">03</div>
-          <div class="bt-body">
             <div class="bt-company">Amazon Advertising · 2019–2025</div>
             <h3 class="bt-title">50K to 2M RPS: Architecting Amazon's Ad Rendering Pipeline from the Ground Up</h3>
             <div class="bt-context">
@@ -236,8 +193,58 @@
               <div class="bt-stat"><span>hrs→mins</span><small>Creative testing time</small></div>
             </div>
             <div class="bt-insight">
-              <span class="bt-insight-icon">💡</span>
+              <span class="bt-insight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.5" width="18" height="18"><path d="M12 2a7 7 0 0 1 5 11.9V17a2 2 0 0 1-2 2h-6a2 2 0 0 1-2-2v-3.1A7 7 0 0 1 12 2z"/><path d="M9 21h6"/></svg></span>
               <p><strong>The lesson:</strong> The biggest wins came from platform-level decisions, not feature work. Choosing ARM over Intel, Node.js over Java, cells over a monolithic fleet — each was a decision most engineers wouldn't have the confidence to make. Architectural courage compounds.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bt-card" data-reveal>
+          <div class="bt-number">02</div>
+          <div class="bt-body">
+            <div class="bt-company">PayPal via DXC Technology · 2016–2017</div>
+            <h3 class="bt-title">From Monolith to 20+ Microservices: Designing PayPal's Regulatory Platform Solo</h3>
+            <div class="bt-context">
+              <span class="bt-context-label">The situation</span>
+              <p>PayPal's Regulatory Platform Technology (RPT) was a monolithic Java application responsible for scanning millions of customer profiles for financial crime — money laundering, terrorist financing, sanctions violations. It was slow, brittle, and couldn't scale to the velocity PayPal needed.</p>
+            </div>
+            <div class="bt-action">
+              <span class="bt-context-label">What I designed and built</span>
+              <p>I designed the entire microservices architecture for RPT from the ground up — decomposing the monolith into <strong>20+ independent services</strong>, each owning a bounded context of the regulatory domain. Key technical choices I made: <strong>Apache Lucene + Levenshtein edit distance</strong> for fuzzy name matching against sanctions watchlists (tolerating transliteration errors in international names), batch-indexed world-check file processing to reduce scan time complexity from O(n²) to near-linear, and a Node.js web interface for regulatory body access to high-risk transaction data.</p>
+            </div>
+            <div class="bt-outcome">
+              <div class="bt-stat"><span>20+</span><small>Microservices designed solo</small></div>
+              <div class="bt-stat"><span>Millions</span><small>Customer profiles scanned</small></div>
+              <div class="bt-stat"><span>O(n²)→O(n)</span><small>Scan complexity reduction</small></div>
+            </div>
+            <div class="bt-insight">
+              <span class="bt-insight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.5" width="18" height="18"><path d="M12 2a7 7 0 0 1 5 11.9V17a2 2 0 0 1-2 2h-6a2 2 0 0 1-2-2v-3.1A7 7 0 0 1 12 2z"/><path d="M9 21h6"/></svg></span>
+              <p><strong>The lesson:</strong> Fuzzy matching in financial compliance isn't a nice-to-have — "Muammar Gaddafi" has over 112 documented transliterations in sanctions databases. Choosing the right algorithm (edit distance) over the obvious one (exact match) was the architectural decision that made the whole system viable.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bt-card" data-reveal>
+          <div class="bt-number">03</div>
+          <div class="bt-body">
+            <div class="bt-company">HTC Global Services · 2012–2016</div>
+            <h3 class="bt-title">The Problem 20 Teams Couldn't Crack in 5 Years — Solved Alone</h3>
+            <div class="bt-context">
+              <span class="bt-context-label">The situation</span>
+              <p>HTC had a fleet of 150+ desktop applications built on a proprietary licensed image processing framework. The annual licence cost was over $1M. For five years, team after team had tried to migrate to open-source. All 20+ attempts failed. The project was considered technically impossible internally.</p>
+            </div>
+            <div class="bt-action">
+              <span class="bt-context-label">What I did differently</span>
+              <p>I approached it as an architecture problem, not a migration problem. Instead of trying to swap one framework for another, I designed a new abstraction layer using <strong>JavaFX</strong> — building a custom rendering engine that replicated the proprietary API surface while running entirely on open-source foundations. I built and shipped all 150+ applications on the new platform alone.</p>
+            </div>
+            <div class="bt-outcome">
+              <div class="bt-stat"><span>$1M+</span><small>Annual licence cost eliminated</small></div>
+              <div class="bt-stat"><span>150+</span><small>Desktop apps migrated</small></div>
+              <div class="bt-stat"><span>1</span><small>Engineer. Solved alone.</small></div>
+            </div>
+            <div class="bt-insight">
+              <span class="bt-insight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.5" width="18" height="18"><path d="M12 2a7 7 0 0 1 5 11.9V17a2 2 0 0 1-2 2h-6a2 2 0 0 1-2-2v-3.1A7 7 0 0 1 12 2z"/><path d="M9 21h6"/></svg></span>
+              <p><strong>The lesson:</strong> When everyone fails at the same approach, the problem isn't the execution — it's the framing. I reframed the migration as a platform architecture challenge, which made the solution obvious.</p>
             </div>
           </div>
         </div>
@@ -265,7 +272,7 @@
         <div class="principle-card" data-reveal>
           <div class="principle-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20" color="#a78bfa"><path d="M11 2L3 12h8l-2 6 8-10h-8l2-6z"/></svg></div>
           <h4>Eliminate latency before it exists</h4>
-          <p>At 2M TPS, the most expensive operations are the ones on the critical path. I design systems to move expensive work off the hot path — caching, pre-computation, async pipelines — before performance becomes a problem, not after.</p>
+          <p>At 2M RPS, the most expensive operations are the ones on the critical path. I design systems to move expensive work off the hot path — caching, pre-computation, async pipelines — before performance becomes a problem, not after.</p>
         </div>
 
         <div class="principle-card" data-reveal>
@@ -542,7 +549,7 @@
       <div class="expertise-layout">
         <div class="expertise-areas">
           <div class="area-card active" data-area="0" data-reveal>
-            <div class="area-icon">⚡</div>
+            <div class="area-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-2)" stroke-width="1.5" width="28" height="28"><path d="M5 12h14M12 5l7 7-7 7"/><circle cx="12" cy="12" r="10"/></svg></div>
             <div class="area-body">
               <h4>Distributed Systems at Scale</h4>
               <p>Designing systems that handle millions of concurrent requests with p99 latencies in milliseconds. From in-memory caches to global microservice meshes.</p>
@@ -550,7 +557,7 @@
             </div>
           </div>
           <div class="area-card" data-area="1" data-reveal>
-            <div class="area-icon">🧠</div>
+            <div class="area-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-2)" stroke-width="1.5" width="28" height="28"><path d="M12 2a6 6 0 0 1 6 6c0 2-1 3.5-2 4.5V16a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-3.5C7 11.5 6 10 6 8a6 6 0 0 1 6-6z"/><path d="M10 18v2a2 2 0 0 0 4 0v-2"/></svg></div>
             <div class="area-body">
               <h4>AI-Native Platform Engineering</h4>
               <p>Building the infrastructure layer for enterprise AI — LLM orchestration pipelines, retrieval-augmented systems, and knowledge graphs that ground AI in real enterprise data.</p>
@@ -558,7 +565,7 @@
             </div>
           </div>
           <div class="area-card" data-area="2" data-reveal>
-            <div class="area-icon">🏗️</div>
+            <div class="area-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-2)" stroke-width="1.5" width="28" height="28"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><path d="M13 17h8M17 13v8"/></svg></div>
             <div class="area-body">
               <h4>Backend Architecture &amp; System Design</h4>
               <p>End-to-end system design from data models to API contracts. Lifecycle state machines, configuration-safe resolution models, and cross-domain workflow orchestration.</p>
@@ -566,7 +573,7 @@
             </div>
           </div>
           <div class="area-card" data-area="3" data-reveal>
-            <div class="area-icon">☁️</div>
+            <div class="area-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-2)" stroke-width="1.5" width="28" height="28"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div>
             <div class="area-body">
               <h4>Cloud Infrastructure &amp; Observability</h4>
               <p>Native AWS architectures, infrastructure cost optimization, and AI telemetry pipelines that capture adoption metrics, automation rates, and model accuracy signals.</p>
@@ -587,14 +594,14 @@
           <div class="awards-block">
             <h3>Awards</h3>
             <div class="award-item">
-              <span class="award-icon">🏆</span>
+              <span class="award-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.5" width="24" height="24"><path d="M8 21h8M12 17v4M17 3H7l-2 7h12L15 3zM5 10a7 7 0 0 0 14 0"/></svg></span>
               <div>
                 <strong>Spot Hero Award</strong>
                 <span>Amazon · Q3 2023</span>
               </div>
             </div>
             <div class="award-item">
-              <span class="award-icon">⭐</span>
+              <span class="award-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.5" width="24" height="24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
               <div>
                 <strong>Best Performer Q2</strong>
                 <span>HTC Global Services · 2015</span>

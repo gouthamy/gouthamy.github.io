@@ -1,3 +1,24 @@
+/* ===== THEME TOGGLE ===== */
+const themeToggle = document.getElementById('themeToggle');
+const root = document.documentElement;
+
+// Respect saved preference; default to light
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme === 'dark') root.setAttribute('data-theme', 'dark');
+
+themeToggle.addEventListener('click', () => {
+  document.body.classList.add('theme-transitioning');
+  const isDark = root.getAttribute('data-theme') === 'dark';
+  if (isDark) {
+    root.removeAttribute('data-theme');
+    localStorage.setItem('theme', 'light');
+  } else {
+    root.setAttribute('data-theme', 'dark');
+    localStorage.setItem('theme', 'dark');
+  }
+  setTimeout(() => document.body.classList.remove('theme-transitioning'), 350);
+});
+
 /* ===== SCROLL PROGRESS ===== */
 const progressBar = document.getElementById('scrollProgress');
 window.addEventListener('scroll', () => {
