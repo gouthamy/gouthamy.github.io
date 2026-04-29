@@ -393,6 +393,8 @@ a { color: inherit; text-decoration: none; }
 
 .exp-small { display: flex; flex-direction: column; gap: 16px; }
 .exp-amazon-featured { border-color: rgba(255,153,0,0.2); }
+.exp-ext-link { color: var(--accent-2); font-family: var(--mono); font-size: 13px; white-space: nowrap; }
+.exp-ext-link:hover { color: var(--accent); }
 .exp-amazon-featured:hover { border-color: rgba(255,153,0,0.4); box-shadow: 0 16px 48px rgba(255,153,0,0.06); }
 .bt-action p + p { margin-top: 12px; }
 
