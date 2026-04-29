@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Goutham Yenuganti — Staff Architect · AI Systems · Distributed Scale</title>
-  <meta name="description" content="Staff Architect & Lead Member Technical Staff at Salesforce. 14+ years solving the unsolvable — $1M licence cost elimination at HTC, 20+ microservices at PayPal, 1M TPS ad systems at Amazon, AI-native ITSM at Salesforce." />
+  <meta name="description" content="Staff Architect & Lead Member Technical Staff at Salesforce. 14+ years solving the unsolvable — $1M licence cost elimination at HTC, 20+ microservices at PayPal, 2M TPS ad systems at Amazon, AI-native ITSM at Salesforce." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -59,7 +59,7 @@
       <p class="hero-description">
         I architect systems that scale and solve problems that stump teams.
         Currently building <strong>AI-native enterprise intelligence</strong> at Salesforce.
-        Previously — <strong>1M TPS ad systems</strong> at Amazon,
+        Previously — <strong>2M TPS ad systems</strong> at Amazon,
         <strong>20+ microservices designed solo</strong> at PayPal.
         And early in my career, I did what 20 teams couldn't in 5 years:
         <strong>migrated 150+ enterprise apps off a $1M/year licensed platform — alone.</strong>
@@ -127,10 +127,10 @@
           <div class="impact-label">Microservices Designed</div>
           <div class="impact-sub">PayPal · Sole architect</div>
         </div>
-        <div class="impact-card" data-count="1" data-suffix="M TPS" data-prefix="">
+        <div class="impact-card" data-count="2" data-suffix="M TPS" data-prefix="">
           <div class="impact-num"><span class="count-prefix"></span><span class="count-val">0</span><span class="count-suffix">M TPS</span></div>
           <div class="impact-label">Peak Throughput</div>
-          <div class="impact-sub">p99 &lt; 20ms</div>
+          <div class="impact-sub">Scaled from 50K → 2M RPS · p99 &lt; 20ms</div>
         </div>
         <div class="impact-card" data-count="150" data-suffix="+" data-prefix="">
           <div class="impact-num"><span class="count-prefix"></span><span class="count-val">0</span><span class="count-suffix">+</span></div>
@@ -218,23 +218,23 @@
           <div class="bt-number">03</div>
           <div class="bt-body">
             <div class="bt-company">Amazon Advertising · 2019–2025</div>
-            <h3 class="bt-title">Architecting the Pipeline That Powers Amazon's Ad Rendering at 1M TPS</h3>
+            <h3 class="bt-title">50K to 2M RPS: Architecting Amazon's Ad Rendering Pipeline from the Ground Up</h3>
             <div class="bt-context">
               <span class="bt-context-label">The situation</span>
-              <p>Amazon's Sponsored Display team needed a rendering service that could handle the full complexity of ad personalization — dynamic product data, real-time bidding signals, device targeting, and creative optimization — at the scale of Amazon's global retail traffic. The existing system couldn't handle the throughput or cost demands.</p>
+              <p>When I joined Amazon's Sponsored Display team, the ad rendering service was handling around 50K requests per second — already significant, but nowhere near what Amazon's ad business demanded. The system needed to scale 40x while handling the full complexity of ad personalization: dynamic product data, real-time bidding signals, device targeting, and creative optimization across Amazon.com, Amazon devices, and third-party sites.</p>
             </div>
             <div class="bt-action">
               <span class="bt-context-label">What I architected</span>
               <p>I was one of the core engineers who designed the <strong>end-to-end ad rendering pipeline</strong> — from customer interaction signals flowing in through Kinesis, through the real-time bidding and targeting layer, to the rendering service that assembled and served the final ad creative. Key architectural decisions: a <strong>distributed in-memory cache</strong> for Amazon product data (eliminating synchronous catalog calls on the hot path), re-architecture to native AWS (EC2, Lambda, Kinesis), and a self-debugging <strong>React operations tool</strong> that gave dependency teams visibility into the pipeline without engineering escalations.</p>
             </div>
             <div class="bt-outcome">
-              <div class="bt-stat"><span>1M TPS</span><small>Peak throughput achieved</small></div>
+              <div class="bt-stat"><span>50K→2M</span><small>RPS scaled end-to-end</small></div>
               <div class="bt-stat"><span>&lt;20ms</span><small>p99 latency</small></div>
               <div class="bt-stat"><span>$8.7M</span><small>Combined revenue + savings</small></div>
             </div>
             <div class="bt-insight">
               <span class="bt-insight-icon">💡</span>
-              <p><strong>The lesson:</strong> At 1M TPS, every synchronous call is a liability. I moved Amazon product data access off the critical path entirely with a distributed cache layer — turning a potential 50ms catalog lookup into a sub-millisecond memory read. Architecture is about eliminating latency before it exists.</p>
+              <p><strong>The lesson:</strong> At 2M TPS, every synchronous call is a liability. I moved Amazon product data access off the critical path entirely with a distributed cache layer — turning a potential 50ms catalog lookup into a sub-millisecond memory read. Architecture is about eliminating latency before it exists.</p>
             </div>
           </div>
         </div>
@@ -262,7 +262,7 @@
         <div class="principle-card" data-reveal>
           <div class="principle-icon"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20" color="#a78bfa"><path d="M11 2L3 12h8l-2 6 8-10h-8l2-6z"/></svg></div>
           <h4>Eliminate latency before it exists</h4>
-          <p>At 1M TPS, the most expensive operations are the ones on the critical path. I design systems to move expensive work off the hot path — caching, pre-computation, async pipelines — before performance becomes a problem, not after.</p>
+          <p>At 2M TPS, the most expensive operations are the ones on the critical path. I design systems to move expensive work off the hot path — caching, pre-computation, async pipelines — before performance becomes a problem, not after.</p>
         </div>
 
         <div class="principle-card" data-reveal>
@@ -373,7 +373,7 @@
           <div class="exp-metrics-row">
             <div class="exp-metric"><span>$6.2M</span><small>Revenue Impact</small></div>
             <div class="exp-metric"><span>$2.5M</span><small>Cost Reduction</small></div>
-            <div class="exp-metric"><span>1M TPS</span><small>Peak Traffic</small></div>
+            <div class="exp-metric"><span>50K→2M</span><small>RPS Scaled</small></div>
           </div>
           <div class="exp-stack">
             <span>Java</span><span>Node.js</span><span>TypeScript</span><span>NestJS</span><span>React</span><span>DynamoDB</span><span>Kinesis</span><span>Memcached</span>
@@ -579,8 +579,8 @@
           <div class="blog-number">03</div>
           <div class="blog-content">
             <div class="blog-tags"><span>Distributed Systems</span><span>AWS</span></div>
-            <h3>1M TPS at Sub-20ms: Architecture of Amazon's Ad Rendering Service</h3>
-            <p>The architectural decisions, caching strategies, and infrastructure choices behind a system serving 1 million requests per second with single-digit millisecond latency.</p>
+            <h3>50K to 2M RPS: Scaling Amazon's Ad Rendering Service by 40x</h3>
+            <p>The architectural decisions, caching strategies, and infrastructure choices behind scaling a system from 50K to 2 million requests per second while keeping p99 latency under 20ms.</p>
             <div class="blog-meta">
               <span class="blog-status coming">Coming Soon</span>
               <span>10 min read</span>

@@ -299,7 +299,7 @@ if ("treatment".equals(variant)) {
 
           <p><strong>The infrastructure investment is front-loaded.</strong> Building a reliable experiment platform — deterministic bucketing, event pipeline, analysis tooling, automated safety checks — takes months. But once it's in place, the marginal cost of running each additional experiment is low. The teams that invest in this infrastructure can run 10x more experiments than teams that do it ad-hoc.</p>
 
-          <p><strong>The p99 matters as much as the mean.</strong> When I was working on the rendering service that handled 1M TPS with p99 latency under 20ms, we couldn't afford to run experiments that improved average latency while degrading the tail. Our experiment framework had p99 latency as a mandatory guardrail metric — any experiment that moved it negatively was automatically paused.</p>
+          <p><strong>The p99 matters as much as the mean.</strong> When I was working on the rendering service we scaled from 50K to 2M RPS with p99 latency under 20ms, we couldn't afford to run experiments that improved average latency while degrading the tail. Our experiment framework had p99 latency as a mandatory guardrail metric — any experiment that moved it negatively was automatically paused.</p>
 
           <p><strong>Distributed caching and experiments are friends.</strong> One of the patterns we used heavily was distributing the experiment assignment decision to the edge — computing variant assignments in the CDN layer before the request even hit our origin servers. This was possible because deterministic hashing is cheap and stateless. The variant assignment was just a header appended to the request.</p>
 
@@ -394,7 +394,7 @@ if ("treatment".equals(variant)) {
           <div class="next-posts-grid">
             <a href="#" class="next-post-card">
               <span class="next-post-tag">Distributed Systems</span>
-              <h4>1M TPS at Sub-20ms: Architecture of Amazon's Ad Rendering Service</h4>
+              <h4>50K to 2M RPS: Scaling Amazon's Ad Rendering Service by 40x</h4>
               <span class="next-post-status">Coming Soon</span>
             </a>
             <a href="#" class="next-post-card">
