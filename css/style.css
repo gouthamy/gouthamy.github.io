@@ -424,6 +424,22 @@ a { color: inherit; text-decoration: none; }
 
 .exp-small { display: flex; flex-direction: column; gap: 16px; }
 .exp-amazon-featured { border-color: rgba(255,153,0,0.2); }
+.exp-amazon-merged { grid-column: span 2; }
+.exp-role-section { display: flex; flex-direction: column; }
+.exp-role-section-compact { }
+.exp-role-header {
+  display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.exp-role-label {
+  font-size: 14px; font-weight: 700; color: var(--accent-2);
+}
+.exp-period-inline {
+  font-size: 12px; color: var(--text-3); font-family: var(--mono);
+}
+.exp-role-divider {
+  height: 1px; background: var(--border); margin: 24px 0;
+}
 .exp-ext-link { color: var(--accent-2); font-family: var(--mono); font-size: 13px; white-space: nowrap; }
 .exp-ext-link:hover { color: var(--accent); }
 .exp-amazon-featured:hover { border-color: rgba(255,153,0,0.4); box-shadow: 0 16px 48px rgba(255,153,0,0.06); }
@@ -638,6 +654,7 @@ a { color: inherit; text-decoration: none; }
 @media (max-width: 1100px) {
   .exp-grid { grid-template-columns: 1fr; }
   .exp-featured { grid-column: span 1; }
+  .exp-amazon-merged { grid-column: span 1; }
   .expertise-layout { grid-template-columns: 1fr; }
   .expertise-certs { position: static; }
   .impact-grid { grid-template-columns: repeat(2, 1fr); }
